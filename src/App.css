@@ -1,0 +1,99 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+body {
+    font-family: "Segoe UI", sans-serif;
+    background-color: #6393b6;
+}
+
+.App {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    color: whitesmoke;
+}
+
+.TimeBoxEditor {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    border: 1px solid grey;
+    border-radius: 20px;
+    padding: 50px;
+    width: 600px;
+    background-color: whitesmoke;
+}
+
+.TimeBoxEditor > * {
+    margin: 10px;
+}
+
+.TimeBoxEditor button {
+    width: 100px;
+    height: 30px;
+}
+
+.TimeBoxEditor input {
+    min-width: 300px;
+    margin-left: 20px;
+}
+
+.TaskDisplayBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid grey;
+    border-radius: 20px;
+    width: 700px;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: whitesmoke;
+}
+
+.control_buttons {
+    display: inline;
+}
+
+.control_buttons button {
+    margin: 10px;
+    width: 60px;
+    font-size: 15px;
+}
+
+h2 {
+    margin: 10px;
+}
+
+h3 {
+    font-size: 20px;
+    margin: 10px;
+}
+
+.ProgressBar {
+    display: flex;
+    align-items: center;
+    width: 600px;
+    height: 35px;
+    border: 1px solid #ff0000;
+    box-shadow: 1px 1px 5px #ec1f1f;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 10px;
+}
+
+.progress {
+    width: 45%;
+    height: 30px;
+    background-color: #ec1f1f;
+}
+
+.inactive {
+    filter: blur(2px) grayscale(1);
+}
