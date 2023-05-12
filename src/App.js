@@ -18,13 +18,19 @@ class TaskDisplayBox extends Component {
         })
     }
 
-    handlePause = () => {
-        this.setState({
-            isRunning: false,
-            isPaused: true,
-            pauseCount: this.state.pauseCount + 1
-        })
+    togglePause = () => {
+        this.setState(
+            function (prevState) {
+                const isPaused = this.state.isPaused
+                return {
+                    isPaused: !isPaused,
+                    pauseCount: isPaused ? prevState.pauseCount : prevState.pauseCount + 1,
+                    isRunning: isPaused
+                }
+            }
+        )
     }
+
 
     handleStop = () => {
         this.setState({
@@ -44,8 +50,9 @@ class TaskDisplayBox extends Component {
                 </div>
                 <div className='control_buttons'>
                     <button disabled={this.state.isRunning} onClick={this.handleStart}>Start</button>
-                    <button disabled={!this.state.isRunning && !this.state.isPaused} onClick={this.handleStop}>Stop</button>
-                    <button disabled={!this.state.isRunning} onClick={this.handlePause}>{this.state.isRunning ? 'Pauzuj' : 'Wznów'}</button>
+                    <button disabled={!this.state.isRunning && !this.state.isPaused} onClick={this.handleStop}>Stop
+                    </button>
+                    <button onClick={this.togglePause}> {this.state.isRunning ? 'Pauzuj' : 'Wznów'}</button>
                 </div>
                 <h3 className='breaks_counter'>Liczba przerw: {this.state.pauseCount}</h3>
             </div>
