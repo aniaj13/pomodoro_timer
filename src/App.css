@@ -68,7 +68,7 @@ h1 {
 }
 
 h2 {
-    margin: 10px;
+    margin: 15px;
 }
 
 h3 {
@@ -85,15 +85,20 @@ h3 {
     box-shadow: 1px 1px 5px #ec1f1f;
     border-radius: 5px;
     padding: 5px;
-    margin: 10px;
+    margin: 20px;
 }
 
 .progress {
-    width: 45%;
-    height: 30px;
+    width: 100%;
+    height: 25px;
     background-color: #ec1f1f;
 }
 
 .inactive {
     filter: blur(2px) grayscale(1);
+}
+
+.Clock {
+    font-size: 20px;
+    margin: 10px;
 }

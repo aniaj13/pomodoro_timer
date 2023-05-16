@@ -1,63 +1,77 @@
 import './App.css';
-import {Component} from "react";
+import {useEffect, useState} from "react";
 
-class TaskDisplayBox extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isRunning: false,
-            isPaused: false,
-            pauseCount: 0,
-        }
-    }
+function Clock({minutes, seconds}) {
 
-    handleStart = () => {
-        this.setState({
-            isRunning: true,
-            isPaused: false,
-        })
-    }
+    return (
+        <div className='Clock'>
+            Pozostało: {minutes}:{seconds}
+        </div>
+    )
+}
 
-    togglePause = () => {
-        this.setState(
-            function (prevState) {
-                const isPaused = this.state.isPaused
-                return {
-                    isPaused: !isPaused,
-                    pauseCount: isPaused ? prevState.pauseCount : prevState.pauseCount + 1,
-                    isRunning: isPaused
-                }
+function TaskDisplayBox() {
+
+    const [isRunning, setIsRunning] = useState(false)
+    const [isPaused, setIsPaused] = useState(false)
+    const [pauseCount, setPauseCount] = useState(0)
+    const [elapsedTimeInSeconds, setElapsedTimeInSeconds] = useState(0)
+
+    const totalTimeInSeconds = 600
+    const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds
+    const minutesLeft = Math.floor(timeLeftInSeconds / 60)
+    const secondsLeft = Math.floor(timeLeftInSeconds % 60)
+    const [progressPercent, setProgressPercent] = useState(0)
+
+    useEffect(() => {
+        if (isRunning) {
+            const timeInterval = setInterval(() => {
+                setElapsedTimeInSeconds(elapsedTimeInSeconds + 0.1)
+                setProgressPercent((elapsedTimeInSeconds / totalTimeInSeconds) * 100)
+            }, 100);
+            return () => {
+                clearInterval(timeInterval)
             }
-        )
+        }
+    }, [isRunning, elapsedTimeInSeconds, totalTimeInSeconds,])
+
+
+    function handleStart() {
+        setIsRunning(true)
+        setIsPaused(false)
     }
 
 
-    handleStop = () => {
-        this.setState({
-            isRunning: false,
-            isPaused: false,
-            pauseCount: 0,
-        })
+    function handleStop() {
+        setIsRunning(false)
+        setPauseCount(0)
+        setElapsedTimeInSeconds(0)
     }
 
-    render() {
-        return (
-            <div className='TaskDisplayBox'>
-                <h2 className='task_name'>Uczę się Reacta</h2>
-                <h3 className='time_left'>Pozostało: ....</h3>
-                <div className={`ProgressBar ${this.state.isPaused ? 'inactive' : ''}`}>
-                    <div className='progress'></div>
-                </div>
-                <div className='control_buttons'>
-                    <button disabled={this.state.isRunning} onClick={this.handleStart}>Start</button>
-                    <button disabled={!this.state.isRunning && !this.state.isPaused} onClick={this.handleStop}>Stop
-                    </button>
-                    <button onClick={this.togglePause}> {this.state.isRunning ? 'Pauzuj' : 'Wznów'}</button>
-                </div>
-                <h3 className='breaks_counter'>Liczba przerw: {this.state.pauseCount}</h3>
+    function togglePause() {
+        if (!isPaused) {
+            setPauseCount(pauseCount + 1)
+        }
+        setIsPaused(!isPaused)
+        setIsRunning(!isRunning)
+    }
+
+    return (
+        <div className='TaskDisplayBox'>
+            <h2 className='task_name'>Uczę się Reacta</h2>
+            <Clock minutes={minutesLeft} seconds={secondsLeft}/>
+            <div className={`ProgressBar ${isRunning ? '' : 'inactive'}`}>
+                <div className='progress' style={{width: `${progressPercent}%`}}></div>
             </div>
-        )
-    }
+            <div className='control_buttons'>
+                <button disabled={isRunning} onClick={handleStart}>Start</button>
+                <button disabled={!isRunning && !isPaused} onClick={handleStop}>Stop
+                </button>
+                <button onClick={togglePause}> {isRunning ? 'Pauzuj' : 'Wznów'}</button>
+            </div>
+            <h3 className='breaks_counter'>Liczba przerw: {pauseCount}</h3>
+        </div>
+    )
 }
 
 function App() {
