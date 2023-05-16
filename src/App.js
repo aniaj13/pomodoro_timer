@@ -1,6 +1,14 @@
 import './App.css';
 import {Component} from "react";
 
+function Clock({minutes, seconds}) {
+    return(
+        <div>
+            Pozostało {minutes}:{seconds}
+        </div>
+    )
+}
+
 class TaskDisplayBox extends Component {
     constructor(props) {
         super(props);
@@ -8,7 +16,16 @@ class TaskDisplayBox extends Component {
             isRunning: false,
             isPaused: false,
             pauseCount: 0,
+            elapsedTimeInSeconds: 0,
         }
+    }
+
+    startTimer = () => {
+        this.intervalId = window.setInterval(() => {
+            this.setState((prevState) => ({
+                elapsedTimeInSeconds: prevState.elapsedTimeInSeconds + 0.1
+            }))
+        }, 100)
     }
 
     handleStart = () => {
@@ -16,12 +33,14 @@ class TaskDisplayBox extends Component {
             isRunning: true,
             isPaused: false,
         })
+        this.startTimer();
     }
 
     togglePause = () => {
         this.setState(
             function (prevState) {
                 const isPaused = this.state.isPaused
+                isPaused ? this.startTimer() : this.stopTimer()
                 return {
                     isPaused: !isPaused,
                     pauseCount: isPaused ? prevState.pauseCount : prevState.pauseCount + 1,
@@ -31,30 +50,47 @@ class TaskDisplayBox extends Component {
         )
     }
 
-
+    stopTimer = () => {
+        window.clearInterval(this.intervalId)
+    }
     handleStop = () => {
         this.setState({
             isRunning: false,
             isPaused: false,
             pauseCount: 0,
+            elapsedTimeInSeconds: 0
         })
+        this.stopTimer();
     }
 
+
+
     render() {
+        const {
+            isPaused,
+            isRunning,
+            pauseCount,
+            elapsedTimeInSeconds,
+        } = this.state
+
+        const totalTimeInSeconds = 600
+        const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds
+        const minutesLeft = Math.floor(timeLeftInSeconds / 60)
+        const secondsLeft = Math.floor(timeLeftInSeconds % 60)
         return (
             <div className='TaskDisplayBox'>
                 <h2 className='task_name'>Uczę się Reacta</h2>
-                <h3 className='time_left'>Pozostało: ....</h3>
-                <div className={`ProgressBar ${this.state.isPaused ? 'inactive' : ''}`}>
+                <Clock minutes={minutesLeft} seconds={secondsLeft}/>
+                <div className={`ProgressBar ${isPaused ? 'inactive' : ''}`}>
                     <div className='progress'></div>
                 </div>
                 <div className='control_buttons'>
-                    <button disabled={this.state.isRunning} onClick={this.handleStart}>Start</button>
-                    <button disabled={!this.state.isRunning && !this.state.isPaused} onClick={this.handleStop}>Stop
+                    <button disabled={isRunning} onClick={this.handleStart}>Start</button>
+                    <button disabled={!isRunning && !isPaused} onClick={this.handleStop}>Stop
                     </button>
-                    <button onClick={this.togglePause}> {this.state.isRunning ? 'Pauzuj' : 'Wznów'}</button>
+                    <button onClick={this.togglePause}> {isRunning ? 'Pauzuj' : 'Wznów'}</button>
                 </div>
-                <h3 className='breaks_counter'>Liczba przerw: {this.state.pauseCount}</h3>
+                <h3 className='breaks_counter'>Liczba przerw: {pauseCount}</h3>
             </div>
         )
     }
