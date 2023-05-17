@@ -1,6 +1,19 @@
 import './App.css';
 import {useEffect, useState} from "react";
 
+function TimeBoxEditor() {
+
+    const [isActive, setIsActive] = useState(true)
+
+    return (
+        <div className={`TimeBoxEditor ${isActive ? '' : 'inactive'}`}>
+            <label> Co chcesz robić? <input disabled={!isActive} defaultValue='Uczę się Reacta' type="text"/></label>
+            <label> Przez ile minut? <input disabled={!isActive} defaultValue='25' type='number'/></label>
+            <button disabled={!isActive}>Zatwierdź zmiany</button>
+        </div>
+    )
+}
+
 function Clock({minutes, seconds}) {
 
     return (
@@ -10,7 +23,8 @@ function Clock({minutes, seconds}) {
     )
 }
 
-function TaskDisplayBox() {
+function TaskDisplayBox({taskTitle}) {
+
 
     const [isRunning, setIsRunning] = useState(false)
     const [isPaused, setIsPaused] = useState(false)
@@ -58,7 +72,7 @@ function TaskDisplayBox() {
 
     return (
         <div className='TaskDisplayBox'>
-            <h2 className='task_name'>Uczę się Reacta</h2>
+            <h2 className='task_name'>{taskTitle}</h2>
             <Clock minutes={minutesLeft} seconds={secondsLeft}/>
             <div className={`ProgressBar ${isRunning ? '' : 'inactive'}`}>
                 <div className='progress' style={{width: `${progressPercent}%`}}></div>
@@ -75,9 +89,15 @@ function TaskDisplayBox() {
 }
 
 function App() {
+
+    const [taskTitle, setTaskTitle] = useState('')
+// TODO add editing task title and time
+
+
     return (
         <div className="App">
-            <TaskDisplayBox/>
+            <TimeBoxEditor taskTitle={taskTitle}/>
+            <TaskDisplayBox taskTitle={taskTitle}/>
         </div>
     );
 }
