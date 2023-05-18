@@ -3,25 +3,11 @@ import {Component} from "react";
 
 function Clock({minutes, seconds}) {
     return (
-        <div>
-            Pozostało {minutes}:{seconds}
+        <div className='Clock'>
+            {minutes}:{seconds}
         </div>
     )
 }
-
-function TaskEditor(props) {
-
-    const {isActive, onTitleChange, onTimeChange, onConfirm} = props
-
-    return (
-        <div className={`TaskEditor ${isActive ? '' : 'inactive'}`}>
-            <label> Co chcesz robić?<input disabled={!isActive} onChange={onTitleChange} type="text"/></label>
-            <label> Przez ile minut?<input disabled={!isActive} onChange={onTimeChange} type="number"/></label>
-            <button onClick={onConfirm} disabled={!isActive}>Zatwierdź zmiany</button>
-        </div>
-    )
-}
-
 class TaskDisplayBox extends Component {
     constructor(props) {
         super(props);
@@ -87,7 +73,7 @@ class TaskDisplayBox extends Component {
             elapsedTimeInSeconds,
         } = this.state
 
-        const {title, totalTimeInMinutes, onEdit, isActive} = this.props
+        const {title, totalTimeInMinutes, isActive} = this.props
 
         const totalTimeInSeconds = totalTimeInMinutes * 60
         const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds
@@ -98,7 +84,7 @@ class TaskDisplayBox extends Component {
 
         return (
             <div className={`TaskDisplayBox ${isActive ? '' : 'inactive'}`}>
-                <h2 className='task_name'>{title}</h2>
+                <h2 className='task_name'>" {title} "</h2>
                 <Clock minutes={minutesLeft} seconds={secondsLeft}/>
                 <div className={`ProgressBar ${isPaused ? 'inactive' : ''}`}>
                     <div style={{
@@ -106,7 +92,6 @@ class TaskDisplayBox extends Component {
                     }} className='progress'></div>
                 </div>
                 <div className='control_buttons'>
-                    <button onClick={onEdit}>Edytuj</button>
                     <button disabled={isRunning} onClick={this.handleStart}>Start</button>
                     <button disabled={!isRunning && !isPaused} onClick={this.handleStop}>Stop
                     </button>
@@ -123,7 +108,7 @@ class EditableTimeBox extends Component {
         title: 'Uczę się Reacta',
         totalTimeInMinutes: 1,
         isEditorActive: true,
-        isTaskActive: false,
+        isTaskActive: true,
     }
 
     confirmChanges = () => {
@@ -146,13 +131,56 @@ class EditableTimeBox extends Component {
     }
 
     render() {
-        const {title, totalTimeInMinutes, isEditorActive, isTaskActive} = this.state
+        const {title, totalTimeInMinutes, isTaskActive} = this.state
 
         return (
             <>
-                <TaskEditor isActive={isEditorActive} onTitleChange={this.handleTitleChange} onTimeChange={this.handleTimeChange} onConfirm={this.confirmChanges}/>
-                <TaskDisplayBox isActive={isTaskActive} onEdit={this.handleEdit} title={title} totalTimeInMinutes={totalTimeInMinutes}/>
+                <TaskDisplayBox isActive={isTaskActive} onEdit={this.handleEdit} title={title}
+                                totalTimeInMinutes={totalTimeInMinutes}/>
             </>
+        )
+    }
+}
+
+function ToDoItem({title, totalTimeInMinutes}) {
+
+    return (
+        <div className='ToDoItem'>
+            <h3>{title} - {totalTimeInMinutes} minutes</h3>
+            <div className='buttons'>
+                <button>Edytuj</button>
+                <button>Usuń</button>
+                <button>Zacznij</button>
+            </div>
+            <br></br>
+        </div>
+    )
+}
+
+class ToDoList extends Component {
+    state = {
+        ToDoList: [
+            {title: 'Uczyć się na egzamin', totalTimeInMinutes: 30},
+            {title: 'Zrobić Couch Stretch', totalTimeInMinutes: 6},
+            {title: 'Potańczyć', totalTimeInMinutes: 15},
+        ]
+    }
+
+    render() {
+        return (
+            <div className='ToDoList'>
+                <h2>To-do List</h2>
+                <hr/>
+                <div className='TaskAdding'>
+                    <button>+ Add Task</button>
+                </div>
+                <div className='TaskList'>
+                    {this.state.ToDoList.map(({title, totalTimeInMinutes}) => (
+                            <ToDoItem title={title} totalTimeInMinutes={totalTimeInMinutes}/>
+                        )
+                    )}
+                </div>
+            </div>
         )
     }
 }
@@ -161,6 +189,7 @@ function App() {
     return (
         <div className="App">
             <EditableTimeBox/>
+            <ToDoList/>
         </div>
     );
 }
