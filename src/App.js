@@ -1,6 +1,6 @@
 import './App.css';
 import {Component} from "react";
-
+import Logo from './tomato.png'
 function Clock({minutes, seconds}) {
     return (
         <div className='Clock'>
@@ -8,6 +8,7 @@ function Clock({minutes, seconds}) {
         </div>
     )
 }
+
 class TaskDisplayBox extends Component {
     constructor(props) {
         super(props);
@@ -28,6 +29,8 @@ class TaskDisplayBox extends Component {
             }))
         }, 100)
     }
+
+    // Todo : disable wznów button if timer not started
 
     handleStart = () => {
         this.setState({
@@ -185,9 +188,21 @@ class ToDoList extends Component {
     }
 }
 
+function Heading() {
+    return (
+        <div className='Heading'>
+            <img className='logo' src={Logo} alt=""/>
+            <h2>Pomodoro App</h2>
+            <a href="https://www.flaticon.com/free-icons/tomato" title="tomato icons">Tomato icons created by justicon -
+                Flaticon</a>
+        </div>
+    )
+}
+
 function App() {
     return (
         <div className="App">
+            <Heading/>
             <EditableTimeBox/>
             <ToDoList/>
         </div>
