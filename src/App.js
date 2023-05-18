@@ -93,6 +93,8 @@ class TaskDisplayBox extends Component {
         const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds
         const minutesLeft = Math.floor(timeLeftInSeconds / 60)
         const secondsLeft = Math.floor(timeLeftInSeconds % 60)
+        const progressPercent = `${(elapsedTimeInSeconds/totalTimeInSeconds) * 100}%`
+
 
 
         return (
@@ -100,7 +102,8 @@ class TaskDisplayBox extends Component {
                 <h2 className='task_name'>{title}</h2>
                 <Clock minutes={minutesLeft} seconds={secondsLeft}/>
                 <div className={`ProgressBar ${isPaused ? 'inactive' : ''}`}>
-                    <div className='progress'></div>
+                    <div style={{
+                        width: progressPercent}} className='progress'></div>
                 </div>
                 <div className='control_buttons'>
                     <button disabled={isRunning} onClick={this.handleStart}>Start</button>
@@ -117,7 +120,7 @@ class TaskDisplayBox extends Component {
 class EditableTimeBox extends Component {
     state = {
         title: 'Uczę się Reacta',
-        totalTimeInMinutes: 5,
+        totalTimeInMinutes: 1,
     }
 
     handleTitleChange = (event) => {
