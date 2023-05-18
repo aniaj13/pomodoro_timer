@@ -9,18 +9,17 @@ function Clock({minutes, seconds}) {
     )
 }
 
-class TaskEditor extends Component {
+function TaskEditor(props) {
 
-    render() {
-        const {onTitleChange, onTimeChange} = this.props
-        return (
-            <div className='TaskEditor'>
-                <label> Co chcesz robić?<input onChange={onTitleChange} type="text"/></label>
-                <label> Przez ile minut?<input onChange={onTimeChange} type="number"/></label>
-                <button>Zatwierdź zmiany</button>
-            </div>
-        )
-    }
+    const {isActive, onTitleChange, onTimeChange, onConfirm} = props
+
+    return (
+        <div className={`TaskEditor ${isActive ? '' : 'inactive'}`}>
+            <label> Co chcesz robić?<input disabled={!isActive} onChange={onTitleChange} type="text"/></label>
+            <label> Przez ile minut?<input disabled={!isActive} onChange={onTimeChange} type="number"/></label>
+            <button onClick={onConfirm} disabled={!isActive}>Zatwierdź zmiany</button>
+        </div>
+    )
 }
 
 class TaskDisplayBox extends Component {
@@ -31,6 +30,7 @@ class TaskDisplayBox extends Component {
             isPaused: false,
             pauseCount: 0,
             elapsedTimeInSeconds: 0,
+            isActive: this.props,
         }
     }
 
@@ -87,25 +87,26 @@ class TaskDisplayBox extends Component {
             elapsedTimeInSeconds,
         } = this.state
 
-        const { title, totalTimeInMinutes } = this.props
+        const {title, totalTimeInMinutes, onEdit, isActive} = this.props
 
         const totalTimeInSeconds = totalTimeInMinutes * 60
         const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds
         const minutesLeft = Math.floor(timeLeftInSeconds / 60)
         const secondsLeft = Math.floor(timeLeftInSeconds % 60)
-        const progressPercent = `${(elapsedTimeInSeconds/totalTimeInSeconds) * 100}%`
-
+        const progressPercent = `${(elapsedTimeInSeconds / totalTimeInSeconds) * 100}%`
 
 
         return (
-            <div className='TaskDisplayBox'>
+            <div className={`TaskDisplayBox ${isActive ? '' : 'inactive'}`}>
                 <h2 className='task_name'>{title}</h2>
                 <Clock minutes={minutesLeft} seconds={secondsLeft}/>
                 <div className={`ProgressBar ${isPaused ? 'inactive' : ''}`}>
                     <div style={{
-                        width: progressPercent}} className='progress'></div>
+                        width: progressPercent
+                    }} className='progress'></div>
                 </div>
                 <div className='control_buttons'>
+                    <button onClick={onEdit}>Edytuj</button>
                     <button disabled={isRunning} onClick={this.handleStart}>Start</button>
                     <button disabled={!isRunning && !isPaused} onClick={this.handleStop}>Stop
                     </button>
@@ -121,7 +122,15 @@ class EditableTimeBox extends Component {
     state = {
         title: 'Uczę się Reacta',
         totalTimeInMinutes: 1,
+        isEditorActive: true,
+        isTaskActive: false,
     }
+
+    confirmChanges = () => {
+        this.setState({isEditorActive: false})
+        this.setState({isTaskActive: true})
+    }
+
 
     handleTitleChange = (event) => {
         this.setState({title: event.target.value})
@@ -131,13 +140,18 @@ class EditableTimeBox extends Component {
         this.setState({totalTimeInMinutes: event.target.value})
     }
 
+    handleEdit = () => {
+        this.setState({isEditorActive: true})
+        this.setState({isTaskActive: false})
+    }
+
     render() {
-        const {title, totalTimeInMinutes } = this.state
+        const {title, totalTimeInMinutes, isEditorActive, isTaskActive} = this.state
 
         return (
             <>
-                <TaskEditor onTitleChange={this.handleTitleChange} onTimeChange={this.handleTimeChange}/>
-                <TaskDisplayBox title={title} totalTimeInMinutes={totalTimeInMinutes}/>
+                <TaskEditor isActive={isEditorActive} onTitleChange={this.handleTitleChange} onTimeChange={this.handleTimeChange} onConfirm={this.confirmChanges}/>
+                <TaskDisplayBox isActive={isTaskActive} onEdit={this.handleEdit} title={title} totalTimeInMinutes={totalTimeInMinutes}/>
             </>
         )
     }
