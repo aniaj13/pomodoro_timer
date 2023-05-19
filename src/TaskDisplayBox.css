@@ -1,0 +1,68 @@
+.TaskDisplayBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    border-radius: 20px;
+    width: 500px;
+    min-height: 300px;
+    padding: 10px;
+    background-color: rgba(173, 85, 85, 0.7);
+    box-shadow: 0 5px 30px rgba(66, 61, 61, 0.29);
+    color: whitesmoke;
+}
+
+.control_buttons {
+    display: inline;
+}
+
+.control_buttons button {
+    margin: 10px;
+    width: 60px;
+    height: 30px;
+    font-size: 15px;
+    border-radius: 5px;
+    border: 1px solid whitesmoke;
+}
+
+.control_buttons button:disabled {
+    background-color: #c7c7c7;
+    border: 1px solid grey;
+}
+
+.control_buttons button:disabled:hover {
+    cursor: auto;
+}
+
+.control_buttons button:hover {
+    cursor: pointer;
+}
+
+h2 {
+    margin: 20px;
+}
+
+.breaks_counter {
+    font-size: 18px;
+    font-weight: normal;
+    margin-top: 10px;
+}
+
+.ProgressBar {
+    background-color: whitesmoke;
+    display: flex;
+    align-items: center;
+    width: 450px;
+    height: 35px;
+    border: 1px solid #752918;
+    box-shadow: 1px 1px 5px #812424;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 10px;
+}
+
+.progress {
+    height: 27px;
+    background-color: #23a230;
+    border-radius: 5px 0 0 5px;
+}
