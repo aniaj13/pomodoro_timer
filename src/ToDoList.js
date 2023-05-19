@@ -25,6 +25,12 @@ export default class ToDoList extends Component {
         ]
     }
 
+    deleteItem = (key) => {
+        console.log(key)
+        const newToDoList = this.state.ToDoList.filter(item => item.title !== key)
+        this.setState({ToDoList: newToDoList})
+    }
+
 
     render() {
 
@@ -44,6 +50,7 @@ export default class ToDoList extends Component {
                                 title={item.title}
                                 totalTimeInMinutes={item.totalTimeInMinutes}
                                 onStart={() => pickTask(item)}
+                                onDelete={() => this.deleteItem(item.title)}
                             />
                         )
                     )}
