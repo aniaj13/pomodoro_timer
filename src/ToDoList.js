@@ -1,15 +1,15 @@
 import './ToDoList.css'
 import {Component} from "react";
 
-function ToDoItem({title, totalTimeInMinutes}) {
+function ToDoItem({title, totalTimeInMinutes, onEdit, onStart, onDelete}) {
 
     return (
         <div className='ToDoItem'>
             <h3>{title} - {totalTimeInMinutes} minutes</h3>
             <div className='buttons'>
-                <button>Edytuj</button>
-                <button>Usuń</button>
-                <button>Zacznij</button>
+                <button onClick={onEdit}>Edytuj</button>
+                <button onClick={onDelete}>Usuń</button>
+                <button onClick={onStart}>Zacznij</button>
             </div>
             <br></br>
         </div>
@@ -25,7 +25,11 @@ export default class ToDoList extends Component {
         ]
     }
 
+
     render() {
+
+        const {pickTask} = this.props
+
         return (
             <div className='ToDoList'>
                 <h2>To-do List</h2>
@@ -34,8 +38,13 @@ export default class ToDoList extends Component {
                     <button>+ Add Task</button>
                 </div>
                 <div className='TaskList'>
-                    {this.state.ToDoList.map(({title, totalTimeInMinutes}) => (
-                            <ToDoItem key={title} title={title} totalTimeInMinutes={totalTimeInMinutes}/>
+                    {this.state.ToDoList.map(item => (
+                            <ToDoItem
+                                key={item.title}
+                                title={item.title}
+                                totalTimeInMinutes={item.totalTimeInMinutes}
+                                onStart={() => pickTask(item)}
+                            />
                         )
                     )}
                 </div>
