@@ -1,6 +1,50 @@
 import './ToDoList.css'
 import {Component} from "react";
 
+class TaskAdder extends Component {
+
+    state = {
+        isAddingOn: true,
+        textInput: '',
+        numberInput: 0,
+    }
+
+    handleTextInputChange = (e) => {
+        this.setState({
+            textInput: e.target.value,
+        })
+    }
+
+    handleNumberInputChange = (e) => {
+        this.setState({
+            numberInput: e.target.value,
+        })
+    }
+
+    render() {
+
+        const {isAddingOn, numberInput, textInput} = this.state
+        const {handleTaskAdding} = this.props
+
+        return (
+            <>
+                {!isAddingOn &&
+                    <div className='TaskAdding'>
+                        <button>+ Add Task</button>
+                    </div>}
+                {isAddingOn &&
+                    <div className='TaskInput'>
+                        <input onChange={this.handleTextInputChange} className='textInput'
+                               placeholder='Type your Task here' type="text"/>
+                        <input onChange={this.handleNumberInputChange} className='numberInput' placeholder='Minutes'
+                               type="number"/>
+                        <button onClick={() => handleTaskAdding(textInput, numberInput)}>+</button>
+                    </div>}
+            </>
+        )
+    }
+}
+
 function ToDoItem({title, totalTimeInMinutes, onEdit, onStart, onDelete}) {
 
     return (
@@ -26,11 +70,16 @@ export default class ToDoList extends Component {
     }
 
     deleteItem = (key) => {
-        console.log(key)
         const newToDoList = this.state.ToDoList.filter(item => item.title !== key)
         this.setState({ToDoList: newToDoList})
     }
 
+    handleTaskAdding = (text, number) => {
+        const newItem = {title: text, totalTimeInMinutes: number}
+        this.setState(prevState => ({
+            ToDoList: [...prevState.ToDoList, newItem]
+        }))
+    }
 
     render() {
 
@@ -40,9 +89,7 @@ export default class ToDoList extends Component {
             <div className='ToDoList'>
                 <h2>To-do List</h2>
                 <hr/>
-                <div className='TaskAdding'>
-                    <button>+ Add Task</button>
-                </div>
+                <TaskAdder handleTaskAdding={this.handleTaskAdding}/>
                 <div className='TaskList'>
                     {this.state.ToDoList.map(item => (
                             <ToDoItem
