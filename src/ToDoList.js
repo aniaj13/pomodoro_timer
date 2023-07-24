@@ -109,7 +109,7 @@ export default class ToDoList extends Component {
 
     handleTitleEdit = (event, pickedItem) => {
         const updatedToDoList = this.state.ToDoList.map(item => {
-            if (item.title === pickedItem.title) {
+            if (item.id === pickedItem.id) {
                 return {
                     ...item,
                     title: event.target.value,
@@ -124,7 +124,7 @@ export default class ToDoList extends Component {
 
     handleMinuteEdit = (event, pickedItem) => {
         const updatedToDoList = this.state.ToDoList.map(item => {
-            if (item.title === pickedItem.title) {
+            if (item.id === pickedItem.id) {
                 return {
                     ...item,
                     title: item.title,
