@@ -94,14 +94,15 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 550px;
     height: 60px;
     background-color: whitesmoke;
-    color: #343232;
+    color: #505050;
     border: 1px solid whitesmoke;
     border-radius: 5px;
     margin: 5px;
+    padding: 0;
 }
 
 .ToDoItem:hover {
@@ -121,6 +122,11 @@ hr {
     background-color: whitesmoke;
 }
 
+.buttons {
+    display: flex;
+    flex-direction: row;
+}
+
 .buttons button {
     margin: 5px;
     height: 30px;
@@ -133,4 +139,46 @@ hr {
 .buttons button:hover {
     cursor: pointer;
     background-color: #e0e0e0;
+}
+
+.ToDoItemTitle {
+    background: none;
+    border: none;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.Item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px 10px 5px 20px;
+}
+
+.ToDoItem input {
+    border: none;
+    font-size: 20px;
+    color: #505050;
+    font-weight: bold;
+    background-color: whitesmoke;
+}
+
+.titleInput {
+    width: 250px;
+    max-width: 300px;
+
+}
+
+.minutesInput{
+    width: 50px;
+    text-align: center;
+    color: #505050;
+    margin-left: 10px;
+}
+
+.ToDoItem span {
+    width: fit-content;
+    font-size: 20px;
+    font-weight: bold;
+    color: #505050;
 }

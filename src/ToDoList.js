@@ -1,10 +1,11 @@
 import './ToDoList.css'
 import {Component} from "react";
+import nextId from 'react-id-generator'
 
 class TaskAdder extends Component {
 
     state = {
-        isAddingOn: true,
+        isAddingOn: false,
         textInput: '',
         numberInput: 0,
     }
@@ -21,6 +22,12 @@ class TaskAdder extends Component {
         })
     }
 
+    enableTaskAdder = () => {
+        this.setState({
+            isAddingOn: true,
+        })
+    }
+
     render() {
 
         const {isAddingOn, numberInput, textInput} = this.state
@@ -30,7 +37,7 @@ class TaskAdder extends Component {
             <>
                 {!isAddingOn &&
                     <div className='TaskAdding'>
-                        <button>+ Add Task</button>
+                        <button onClick={this.enableTaskAdder}>+ Add Task</button>
                     </div>}
                 {isAddingOn &&
                     <div className='TaskInput'>
@@ -45,27 +52,46 @@ class TaskAdder extends Component {
     }
 }
 
-function ToDoItem({title, totalTimeInMinutes, onEdit, onStart, onDelete}) {
+// TODO add is adding on false on button click
 
-    return (
-        <div className='ToDoItem'>
-            <h3>{title} - {totalTimeInMinutes} minutes</h3>
-            <div className='buttons'>
-                <button onClick={onEdit}>Edytuj</button>
-                <button onClick={onDelete}>Usuń</button>
-                <button onClick={onStart}>Zacznij</button>
+class ToDoItem extends Component {
+
+
+    render() {
+        const {title, totalTimeInMinutes, onStart, onDelete, onTitleChange, onMinuteChange} = this.props
+
+        return (
+            <div className='ToDoItem'>
+                <div className='Item'>
+                    <input onChange={onTitleChange} className='titleInput' type="text" placeholder={title} value={title}/>
+                    <span>-</span>
+                    <input onChange={onMinuteChange} className='minutesInput' type="number" placeholder={totalTimeInMinutes}/>
+                    <span>minutes</span>
+                </div>
+                <div className='buttons'>
+                    <button onClick={onDelete}>Usuń</button>
+                    <button onClick={onStart}>Zacznij</button>
+                </div>
+                <br></br>
             </div>
-            <br></br>
-        </div>
-    )
+        )
+    }
+
 }
 
 export default class ToDoList extends Component {
+
+    constructor(props) {
+        super(props);
+        this.handleTitleEdit = this.handleTitleEdit.bind(this)
+        this.handleMinuteEdit = this.handleMinuteEdit.bind(this)
+    }
+
     state = {
         ToDoList: [
-            {title: 'Uczyć się na egzamin', totalTimeInMinutes: 30},
-            {title: 'Zrobić Couch Stretch', totalTimeInMinutes: 6},
-            {title: 'Potańczyć', totalTimeInMinutes: 15},
+            {id: nextId(), title: 'Uczyć się na egzamin', totalTimeInMinutes: 30},
+            {id: nextId(), title: 'Zrobić Couch Stretch', totalTimeInMinutes: 6},
+            {id: nextId(), title: 'Potańczyć', totalTimeInMinutes: 15},
         ]
     }
 
@@ -75,11 +101,42 @@ export default class ToDoList extends Component {
     }
 
     handleTaskAdding = (text, number) => {
-        const newItem = {title: text, totalTimeInMinutes: number}
+        const newItem = {id: nextId(), title: text, totalTimeInMinutes: number}
         this.setState(prevState => ({
             ToDoList: [...prevState.ToDoList, newItem]
         }))
     }
+
+    handleTitleEdit = (event, pickedItem) => {
+        const updatedToDoList = this.state.ToDoList.map(item => {
+            if (item.title === pickedItem.title) {
+                return {
+                    ...item,
+                    title: event.target.value,
+                    totalTimeInMinutes: item.totalTimeInMinutes
+                };
+            }
+            return item;
+        });
+
+        this.setState({ToDoList: updatedToDoList});
+    };
+
+    handleMinuteEdit = (event, pickedItem) => {
+        const updatedToDoList = this.state.ToDoList.map(item => {
+            if (item.title === pickedItem.title) {
+                return {
+                    ...item,
+                    title: item.title,
+                    totalTimeInMinutes: event.target.value
+                };
+            }
+            return item;
+        });
+
+        this.setState({ToDoList: updatedToDoList});
+    };
+
 
     render() {
 
@@ -93,11 +150,13 @@ export default class ToDoList extends Component {
                 <div className='TaskList'>
                     {this.state.ToDoList.map(item => (
                             <ToDoItem
-                                key={item.title}
+                                key={item.id}
                                 title={item.title}
                                 totalTimeInMinutes={item.totalTimeInMinutes}
                                 onStart={() => pickTask(item)}
                                 onDelete={() => this.deleteItem(item.title)}
+                                onTitleChange={event => this.handleTitleEdit(event, item)}
+                                onMinuteChange={event => this.handleMinuteEdit(event, item)}
                             />
                         )
                     )}

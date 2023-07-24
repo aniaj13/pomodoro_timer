@@ -6,7 +6,7 @@ import ToDoList from "./ToDoList";
 export default class TimeBox extends Component {
     state = {
         title: 'Uczę się Reacta',
-        totalTimeInMinutes: 25,
+        totalTimeInMinutes: 0.1,
         isRunning: false,
         isPaused: false,
         pauseCount: 0,
@@ -21,12 +21,18 @@ export default class TimeBox extends Component {
         this.handleStop()
     }
 
+    checkIfDone = () => {
+        if (this.state.totalTimeInMinutes * 60 < this.state.elapsedTimeInSeconds) {
+            window.clearInterval(this.intervalId)
+        }
+    }
     startTimer = () => {
         clearInterval(this.intervalId)
         this.intervalId = window.setInterval(() => {
             this.setState((prevState) => ({
                 elapsedTimeInSeconds: prevState.elapsedTimeInSeconds + 0.1
             }))
+            this.checkIfDone()
         }, 100)
     }
 
