@@ -97,7 +97,7 @@ export default class ToDoList extends Component {
     }
 
     deleteItem = (key) => {
-        const newToDoList = this.state.ToDoList.filter(item => item.title !== key)
+        const newToDoList = this.state.ToDoList.filter(item => item.id !== key)
         this.setState({ToDoList: newToDoList})
     }
 
@@ -155,7 +155,7 @@ export default class ToDoList extends Component {
                                 title={item.title}
                                 totalTimeInMinutes={item.totalTimeInMinutes}
                                 onStart={() => pickTask(item)}
-                                onDelete={() => this.deleteItem(item.title)}
+                                onDelete={() => this.deleteItem(item.id)}
                                 onTitleChange={event => this.handleTitleEdit(event, item)}
                                 onMinuteChange={event => this.handleMinuteEdit(event, item)}
                             />

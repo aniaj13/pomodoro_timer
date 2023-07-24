@@ -8,6 +8,7 @@
 body {
     font-family: "Segoe UI", sans-serif;
     background-color: rgba(171, 32, 32, 0.87);
+    cursor: default;
 }
 
 .App {
