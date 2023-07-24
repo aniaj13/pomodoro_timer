@@ -57,6 +57,7 @@ class TaskAdder extends Component {
 class ToDoItem extends Component {
 
 
+
     render() {
         const {title, totalTimeInMinutes, onStart, onDelete, onTitleChange, onMinuteChange} = this.props
 
@@ -65,7 +66,7 @@ class ToDoItem extends Component {
                 <div className='Item'>
                     <input onChange={onTitleChange} className='titleInput' type="text" placeholder={title} value={title}/>
                     <span>-</span>
-                    <input onChange={onMinuteChange} className='minutesInput' type="number" placeholder={totalTimeInMinutes}/>
+                    <input onChange={onMinuteChange} min={1} className='minutesInput' type="number" placeholder={totalTimeInMinutes}/>
                     <span>minutes</span>
                 </div>
                 <div className='buttons'>
